@@ -1692,7 +1692,7 @@ footer {
     <div class="globe-layout">
       <div class="globe-container">
         <svg id="globe-svg"></svg>
-        <div class="globe-hint mono">drag to rotate · click a pin for details</div>
+        <div class="globe-hint mono">drag to rotate · scroll to zoom · click a pin for details</div>
       </div>
       <div class="pin-panel">
         <div class="pin-panel-empty" id="pin-empty">
@@ -2254,8 +2254,9 @@ footer {
   gm.append('feMergeNode').attr('in','blur');
   gm.append('feMergeNode').attr('in','SourceGraphic');
 
+  const baseScale = Math.min(W, H) * 0.42;
   const projection = d3.geoOrthographic()
-    .scale(Math.min(W, H) * 0.42)
+    .scale(baseScale)
     .translate([W/2, H/2])
     .rotate([66, -18, 0])
     .clipAngle(90);
@@ -2313,6 +2314,7 @@ footer {
   let autoRotate = true;
   let rotating = true;
   const sensitivity = 75;
+  let currentScale = 1;
 
   // Load world topology
   fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
@@ -2401,7 +2403,16 @@ footer {
     })
     .on('end', () => { autoRotate = true; });
 
-  svg.call(drag);
+  // Zoom behavior
+  const zoom = d3.zoom()
+    .scaleExtent([0.5, 4])
+    .on('zoom', event => {
+      currentScale = event.transform.k;
+      projection.scale(baseScale * currentScale);
+      redraw();
+    });
+
+  svg.call(drag).call(zoom);
 
   function redraw() {
     svg.select('.sphere').attr('d', path);
