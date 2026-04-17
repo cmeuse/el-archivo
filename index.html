@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EL ARCHIVO — Research Companion | CULP 3101</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   DESIGN SYSTEM
+═══════════════════════════════════════════════════ */
+:root {
+  --bg:        #05091A;
+  --bg2:       #080D20;
+  --navy:      #0A1F3D;
+  --navy-mid:  #122B54;
+  --red:       #CE1126;
+  --red-dim:   rgba(206,17,38,0.15);
+  --red-glow:  rgba(206,17,38,0.35);
+  --gold:      #C9A84C;
+  --gold-dim:  rgba(201,168,76,0.12);
+  --cream:     #F2EDE3;
+  --offwhite:  #D4CBB8;
+  --muted:     #6B7A99;
+  --glass:     rgba(255,255,255,0.03);
+  --glass2:    rgba(255,255,255,0.06);
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.12);
+
+  /* Framework Colors */
+  --fw-A: #60A5FA;  --fw-A-dim: rgba(96,165,250,0.12);
+  --fw-B: #34D399;  --fw-B-dim: rgba(52,211,153,0.12);
+  --fw-C: #FBBF24;  --fw-C-dim: rgba(251,191,36,0.12);
+  --fw-D: #F87171;  --fw-D-dim: rgba(248,113,113,0.12);
+  --fw-E: #C084FC;  --fw-E-dim: rgba(192,132,252,0.12);
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--cream);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* Noise texture overlay */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:1000; opacity:0.35;
+}
+
+/* ═══════ TYPOGRAPHY ═══════ */
+.display { font-family:'Cormorant Garamond', serif; }
+.mono    { font-family:'JetBrains Mono', monospace; }
+
+/* ═══════ SCROLLBAR ═══════ */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--navy-mid); border-radius:2px; }
+
+/* ═══════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════ */
+nav.main-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  background: rgba(5,9,26,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 60px;
+}
+
+.nav-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--cream);
+}
+.nav-brand em { color: var(--red); font-style: normal; }
+
+.nav-links {
+  display: flex;
+  gap: 0;
+  list-style: none;
+}
+.nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1.1rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  border-right: 1px solid var(--border);
+  white-space: nowrap;
+}
+.nav-links a:first-child { border-left: 1px solid var(--border); }
+.nav-links a:hover { color: var(--cream); }
+.nav-links a .nav-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--red);
+}
+
+.nav-meta {
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-align: right;
+  line-height: 1.4;
+}
+
+/* ═══════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════ */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+#hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  padding: 2rem;
+}
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadeUp 1s 0.3s forwards;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(5rem, 12vw, 11rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 0.9;
+  color: var(--cream);
+  text-shadow:
+    0 0 80px rgba(206,17,38,0.25),
+    0 0 160px rgba(206,17,38,0.1);
+  opacity: 0;
+  animation: fadeUp 1.2s 0.5s forwards;
+}
+
+.hero-title-el {
+  color: var(--red);
+  display: block;
+  font-size: 0.55em;
+  letter-spacing: 0.3em;
+  font-weight: 300;
+  margin-bottom: 0.15em;
+}
+
+.hero-divider {
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
+  margin: 2rem auto;
+  opacity: 0;
+  animation: fadeUp 1s 0.8s forwards;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: rgba(242,237,227,0.65);
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  animation: fadeUp 1s 1s forwards;
+}
+
+.hero-byline {
+  margin-top: 0.8rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0;
+  animation: fadeUp 1s 1.1s forwards;
+}
+
+.hero-flag {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-top: 3rem;
+  opacity: 0;
+  animation: fadeUp 1s 1.3s forwards;
+}
+.hero-flag span {
+  height: 3px;
+  width: 60px;
+  display: block;
+}
+.hero-flag .f1,.hero-flag .f3,.hero-flag .f5 { background: var(--red); box-shadow: 0 0 8px var(--red-glow); }
+.hero-flag .f2,.hero-flag .f4 { background: rgba(255,255,255,0.7); }
+
+.hero-scroll {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeIn 1s 2s forwards;
+  color: var(--muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--red), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(24px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+@keyframes scrollPulse {
+  0%,100% { transform: scaleY(1); opacity:1; }
+  50%      { transform: scaleY(0.6); opacity:0.5; }
+}
+
+/* ═══════════════════════════════════════════════════
+   LAYOUT CONTAINERS
+═══════════════════════════════════════════════════ */
+.section-wrap {
+  padding: 8rem 0 6rem;
+}
+
+.section-wrap.dark {
+  background: var(--bg2);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 3rem;
+}
+
+/* ═══════════════════════════════════════════════════
+   SECTION HEADERS
+═══════════════════════════════════════════════════ */
+.section-label {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+  margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s, transform 0.7s;
+}
+.section-label.visible { opacity:1; transform:translateY(0); }
+
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--red);
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--red-glow);
+  border-radius: 2px;
+  background: var(--red-dim);
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--cream);
+}
+
+.section-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 0.3rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  max-width: 700px;
+}
+
+.section-rule {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--red) 0%, var(--border) 40%, transparent 100%);
+  margin: 1.5rem 0 3rem;
+  opacity: 0;
+  transition: opacity 0.7s 0.2s;
+}
+.section-rule.visible { opacity:1; }
+
+/* ═══════════════════════════════════════════════════
+   INTRO CALLOUT
+═══════════════════════════════════════════════════ */
+.intro-callout {
+  background: var(--glass);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--red);
+  border-radius: 0 8px 8px 0;
+  padding: 1.5rem 2rem;
+  margin-bottom: 3rem;
+  font-size: 0.92rem;
+  color: var(--offwhite);
+  line-height: 1.75;
+}
+
+.fw-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+}
+
+.fw-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.8rem;
+  border-radius: 100px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  opacity: 0.8;
+}
+.fw-chip.A { color: var(--fw-A); background: var(--fw-A-dim); border-color: rgba(96,165,250,0.3); }
+.fw-chip.B { color: var(--fw-B); background: var(--fw-B-dim); border-color: rgba(52,211,153,0.3); }
+.fw-chip.C { color: var(--fw-C); background: var(--fw-C-dim); border-color: rgba(251,191,36,0.3); }
+.fw-chip.D { color: var(--fw-D); background: var(--fw-D-dim); border-color: rgba(248,113,113,0.3); }
+.fw-chip.E { color: var(--fw-E); background: var(--fw-E-dim); border-color: rgba(192,132,252,0.3); }
+.fw-chip::before { content:'●'; font-size:0.55rem; }
+
+/* ═══════════════════════════════════════════════════
+   SONG CARDS — LYRIC THEATER
+═══════════════════════════════════════════════════ */
+.songs-grid {
+  display: grid;
+  gap: 1px;
+}
+
+.song-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  overflow: hidden;
+  transition: border-color 0.3s, background 0.3s;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s, transform 0.5s, border-color 0.3s, background 0.3s;
+}
+.song-card.visible { opacity:1; transform:translateY(0); }
+.song-card:hover { border-color: var(--border2); background: var(--glass2); }
+
+/* Framework left-glow borders */
+.song-card.fw-A { border-left: 2px solid var(--fw-A); box-shadow: inset 3px 0 20px rgba(96,165,250,0.04); }
+.song-card.fw-B { border-left: 2px solid var(--fw-B); box-shadow: inset 3px 0 20px rgba(52,211,153,0.04); }
+.song-card.fw-C { border-left: 2px solid var(--fw-C); box-shadow: inset 3px 0 20px rgba(251,191,36,0.04); }
+.song-card.fw-D { border-left: 2px solid var(--fw-D); box-shadow: inset 3px 0 20px rgba(248,113,113,0.04); }
+.song-card.fw-E { border-left: 2px solid var(--fw-E); box-shadow: inset 3px 0 20px rgba(192,132,252,0.04); }
+
+.song-header {
+  padding: 1.4rem 1.8rem;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 3rem 1fr auto auto;
+  align-items: center;
+  gap: 1.2rem;
+  user-select: none;
+}
+
+.song-play-btn {
+  width: 32px; height: 32px;
+  border: 1px solid var(--border2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--glass);
+  color: var(--gold);
+  cursor: pointer;
+  transition: all 0.3s;
+  flex-shrink: 0;
+  font-size: 0.7rem;
+}
+.song-play-btn:hover {
+  background: var(--glass2);
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: scale(1.05);
+}
+.song-play-btn.playing {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.song-play-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.song-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.song-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.2;
+}
+.song-meta-line {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.song-dot { color: var(--border2); }
+
+.song-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.badge {
+  padding: 0.15rem 0.6rem;
+  border-radius: 2px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.badge-A { background: var(--fw-A-dim); color: var(--fw-A); }
+.badge-B { background: var(--fw-B-dim); color: var(--fw-B); }
+.badge-C { background: var(--fw-C-dim); color: var(--fw-C); }
+.badge-D { background: var(--fw-D-dim); color: var(--fw-D); }
+.badge-E { background: var(--fw-E-dim); color: var(--fw-E); }
+
+.song-toggle-icon {
+  width: 28px; height: 28px;
+  border: 1px solid var(--border2);
+  border-radius: 50%;
+  display: flex; align-items:center; justify-content:center;
+  color: var(--muted);
+  font-size: 0.7rem;
+  transition: transform 0.3s, border-color 0.3s, color 0.3s;
+  flex-shrink: 0;
+}
+.song-card.open .song-toggle-icon {
+  transform: rotate(180deg);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.song-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.song-body.open { max-height: 1200px; }
+
+.song-body-inner {
+  padding: 0 1.8rem 1.8rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+
+.lyric-block {
+  position: relative;
+  padding: 1.2rem 1.4rem 1.2rem 2rem;
+  margin: 1.2rem 0;
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+.lyric-block::before {
+  content:'';
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:3px;
+  background: var(--red);
+  border-radius: 2px;
+  box-shadow: 0 0 12px var(--red-glow);
+}
+
+.lyric-es {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.5;
+}
+.lyric-en {
+  font-size: 0.83rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+.lyric-source {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--red);
+  margin-top: 0.6rem;
+  letter-spacing: 0.05em;
+}
+
+.anno-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin: 1.2rem 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.anno-label::after {
+  content:'';
+  flex:1;
+  height:1px;
+  background: var(--border);
+}
+
+.anno-text {
+  font-size: 0.88rem;
+  color: rgba(242,237,227,0.75);
+  line-height: 1.75;
+}
+.anno-text strong { color: var(--cream); font-weight: 600; }
+.anno-text em { font-style: italic; color: var(--offwhite); }
+
+/* ═══════════════════════════════════════════════════
+   CONSTELLATION
+═══════════════════════════════════════════════════ */
+.constellation-section {
+  padding: 8rem 0 6rem;
+  background: radial-gradient(ellipse at center, rgba(10,31,61,0.4) 0%, var(--bg) 70%);
+  position: relative;
+}
+
+#constellation-svg {
+  width: 100%;
+  height: 600px;
+  cursor: grab;
+}
+#constellation-svg:active { cursor: grabbing; }
+
+.const-tooltip {
+  position: absolute;
+  background: rgba(5,9,26,0.95);
+  border: 1px solid var(--border2);
+  backdrop-filter: blur(12px);
+  padding: 1rem 1.3rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  pointer-events: none;
+  max-width: 280px;
+  line-height: 1.5;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.2s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.const-tooltip.visible { opacity: 1; }
+.const-tooltip-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 0.4rem;
+}
+.const-tooltip-meta { color: var(--muted); font-size: 0.75rem; }
+.const-tooltip-edge {
+  margin-top: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--offwhite);
+  font-style: italic;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.edge-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.edge-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.2rem 1.4rem;
+  transition: border-color 0.3s, background 0.3s;
+}
+.edge-card:hover { border-color: var(--border2); background: var(--glass2); }
+.edge-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--fw-E);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.edge-card-title .arrow { color: var(--muted); font-size: 0.8rem; }
+.edge-card p { font-size: 0.83rem; color: rgba(242,237,227,0.7); line-height: 1.65; }
+.edge-label-tag {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: 0.65rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════
+   GLOBE / DIASPORA MAP
+═══════════════════════════════════════════════════ */
+.globe-section {
+  padding: 8rem 0 6rem;
+  background: var(--bg2);
+  position: relative;
+}
+
+.globe-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 3rem;
+  align-items: start;
+  margin-top: 3rem;
+}
+
+.globe-container {
+  position: relative;
+}
+
+#globe-svg {
+  width: 100%;
+  max-height: 560px;
+  cursor: grab;
+  display: block;
+}
+#globe-svg:active { cursor: grabbing; }
+
+.globe-hint {
+  font-size: 0.68rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  text-align: center;
+  margin-top: 1rem;
+  letter-spacing: 0.08em;
+}
+
+.globe-layers {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.layer-btn {
+  padding: 0.3rem 0.9rem;
+  border-radius: 100px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--border2);
+  background: var(--glass);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.layer-btn.active, .layer-btn:hover {
+  background: var(--red-dim);
+  border-color: var(--red-glow);
+  color: var(--cream);
+}
+
+.pin-panel {
+  position: sticky;
+  top: 80px;
+}
+
+.pin-panel-empty {
+  background: var(--glass);
+  border: 1px dashed var(--border2);
+  border-radius: 8px;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+.pin-panel-empty .pin-icon { font-size: 2rem; margin-bottom: 1rem; opacity: 0.4; }
+
+.pin-detail {
+  background: var(--glass);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 1.8rem;
+  display: none;
+}
+.pin-detail.visible { display: block; }
+
+.pin-detail-location {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--red);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+.pin-detail-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+}
+.pin-detail-coords {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+.pin-detail-songs {
+  font-size: 0.75rem;
+  color: var(--fw-E);
+  font-style: italic;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.pin-detail-lyric {
+  background: rgba(0,0,0,0.2);
+  border-left: 2px solid var(--red);
+  box-shadow: 0 0 12px var(--red-dim);
+  padding: 0.9rem 1.1rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.98rem;
+  font-style: italic;
+  color: var(--cream);
+  margin-bottom: 1rem;
+  border-radius: 0 4px 4px 0;
+}
+.pin-detail-anno {
+  font-size: 0.83rem;
+  color: rgba(242,237,227,0.7);
+  line-height: 1.7;
+}
+
+/* ═══════════════════════════════════════════════════
+   POLITICAL TIMELINE
+═══════════════════════════════════════════════════ */
+.timeline-section {
+  padding: 8rem 0 6rem;
+  position: relative;
+}
+
+.timeline-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+.tl-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.tl-legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.tl-legend-dot.event   { background: var(--fw-A); box-shadow: 0 0 8px rgba(96,165,250,0.5); }
+.tl-legend-dot.release { background: var(--red);  box-shadow: 0 0 8px var(--red-glow); }
+
+.timeline {
+  position: relative;
+}
+
+/* Center spine */
+.timeline::before {
+  content:'';
+  position:absolute;
+  left:50%;
+  top:0; bottom:0;
+  width:1px;
+  background: linear-gradient(to bottom, transparent, var(--border2) 5%, var(--border2) 95%, transparent);
+  transform: translateX(-50%);
+}
+
+.tl-year-marker {
+  text-align: center;
+  position: relative;
+  margin: 3.5rem 0 1.5rem;
+}
+.tl-year-marker:first-child { margin-top:0; }
+.tl-year-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--navy-mid);
+  line-height: 1;
+  position: relative;
+  display: inline-block;
+  letter-spacing: 0.04em;
+}
+.tl-year-num.active-year { color: rgba(206,17,38,0.2); }
+
+.tl-year-marker::before {
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:10px; height:10px;
+  background: var(--red);
+  border-radius:50%;
+  box-shadow: 0 0 16px var(--red-glow);
+  z-index:2;
+}
+
+.tl-entry {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 0;
+  align-items: start;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+.tl-entry.visible { opacity:1; transform:translateY(0); }
+
+.tl-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.3rem 1.5rem;
+  transition: border-color 0.3s;
+  position: relative;
+}
+.tl-card:hover { border-color: var(--border2); }
+
+/* Event card (left side) */
+.tl-entry.event .tl-card {
+  grid-column: 1;
+  margin-right: 30px;
+  border-left: 2px solid var(--fw-A);
+}
+.tl-entry.event .tl-center { grid-column: 2; }
+.tl-entry.event .tl-spacer { grid-column: 3; }
+
+/* Release card (right side) */
+.tl-entry.release .tl-spacer { grid-column: 1; }
+.tl-entry.release .tl-center { grid-column: 2; }
+.tl-entry.release .tl-card {
+  grid-column: 3;
+  margin-left: 30px;
+  border-right: 2px solid var(--red);
+}
+
+.tl-center {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding-top: 1.3rem;
+}
+.tl-node {
+  width: 12px; height: 12px;
+  border-radius:50%;
+  flex-shrink:0;
+  position:relative;
+  z-index:2;
+}
+.tl-entry.event   .tl-node { background: var(--fw-A); box-shadow: 0 0 12px rgba(96,165,250,0.5); }
+.tl-entry.release .tl-node { background: var(--red);  box-shadow: 0 0 12px var(--red-glow); }
+
+.tl-card-type {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.tl-entry.event   .tl-card-type { color: var(--fw-A); }
+.tl-entry.release .tl-card-type { color: var(--red); }
+
+.tl-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+
+.tl-card-body {
+  font-size: 0.82rem;
+  color: rgba(242,237,227,0.65);
+  line-height: 1.7;
+}
+.tl-card-body strong { color: var(--offwhite); font-weight: 600; }
+
+/* ═══════════════════════════════════════════════════
+   BIBLIOGRAPHY
+═══════════════════════════════════════════════════ */
+.bib-section {
+  padding: 8rem 0 6rem;
+  background: var(--bg2);
+}
+
+.bib-category {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--red);
+  margin: 2.5rem 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.bib-category::after {
+  content:'';
+  flex:1;
+  height:1px;
+  background: linear-gradient(90deg, var(--red-dim), transparent);
+}
+
+.bib-entry {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.86rem;
+  color: rgba(242,237,227,0.7);
+  line-height: 1.65;
+  transition: color 0.2s;
+}
+.bib-entry:hover { color: var(--cream); }
+.bib-entry:last-child { border-bottom: none; }
+.bib-entry a {
+  color: var(--fw-A);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.bib-entry a:hover { color: var(--cream); text-decoration: underline; }
+.bib-entry em { font-style: italic; color: var(--offwhite); }
+.bib-entry strong { color: var(--cream); font-weight: 600; }
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 2rem;
+}
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--cream);
+}
+.footer-brand em { color: var(--red); font-style: normal; }
+.footer-meta {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.4rem;
+  line-height: 1.6;
+}
+.footer-flag {
+  display: flex;
+  gap: 0;
+  height: 3px;
+  margin-top: 1.5rem;
+  max-width: 100px;
+}
+.footer-flag span { flex:1; }
+.footer-flag .f1,.footer-flag .f3,.footer-flag .f5 { background: var(--red); }
+.footer-flag .f2,.footer-flag .f4 { background: rgba(255,255,255,0.5); }
+
+.footer-right {
+  text-align: right;
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.8;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ═══════════════════════════════════════════════════
+   REVEAL ANIMATIONS
+═══════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children */
+.stagger > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.stagger.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay: 0s; }
+.stagger.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay: 0.08s; }
+.stagger.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay: 0.16s; }
+.stagger.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay: 0.24s; }
+.stagger.visible > *:nth-child(5) { opacity:1; transform:none; transition-delay: 0.32s; }
+.stagger.visible > *:nth-child(6) { opacity:1; transform:none; transition-delay: 0.40s; }
+.stagger.visible > *:nth-child(7) { opacity:1; transform:none; transition-delay: 0.48s; }
+
+/* ═══════════════════════════════════════════════════
+   D3 GLOBE STYLES
+═══════════════════════════════════════════════════ */
+.sphere { fill: #030712; }
+.graticule { fill:none; stroke: rgba(96,165,250,0.06); stroke-width:0.5; }
+.land { fill: #0d2040; stroke: rgba(96,165,250,0.15); stroke-width:0.5; }
+.land-highlight { fill: #1a0a18; stroke: rgba(206,17,38,0.6); stroke-width:1; }
+.sphere-glow { fill:none; stroke: rgba(96,165,250,0.12); stroke-width:12; }
+
+.globe-pin circle { cursor: pointer; transition: r 0.2s; }
+.globe-pin:hover circle { r: 7; }
+.globe-pin text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  fill: var(--cream);
+  pointer-events: none;
+}
+
+.arc-path {
+  fill: none;
+  stroke: rgba(206,17,38,0.3);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+/* ═══════════════════════════════════════════════════
+   CONSTELLATION D3 STYLES
+═══════════════════════════════════════════════════ */
+.const-link {
+  stroke: rgba(255,255,255,0.06);
+  stroke-width: 1;
+  fill: none;
+}
+.const-link.highlighted { stroke: rgba(255,255,255,0.25); stroke-width: 1.5; }
+
+.hub-node circle {
+  cursor: pointer;
+  transition: r 0.3s;
+}
+.song-node {
+  cursor: pointer;
+}
+.hub-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+  fill: var(--muted);
+}
+.song-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 8px;
+  fill: var(--muted);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .container { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  .globe-layout { grid-template-columns: 1fr; }
+  .edge-grid { grid-template-columns: 1fr; }
+  .timeline::before { display: none; }
+  .tl-entry {
+    grid-template-columns: 1fr;
+    margin-bottom: 1rem;
+  }
+  .tl-entry.event .tl-card,
+  .tl-entry.release .tl-card {
+    grid-column: 1;
+    margin: 0;
+    border-left: 2px solid;
+  }
+  .tl-entry.event .tl-card { border-left-color: var(--fw-A); }
+  .tl-entry.release .tl-card { border-left-color: var(--red); border-right: none; }
+  .tl-center, .tl-spacer { display: none; }
+  footer { grid-template-columns: 1fr; }
+  .footer-right { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav class="main-nav">
+  <div class="nav-brand"><em>EL</em> ARCHIVO</div>
+  <ul class="nav-links">
+    <li><a href="#lyric-theater"><span class="nav-num">01</span> Lyric Theater</a></li>
+    <li><a href="#constellation"><span class="nav-num">02</span> Constellation</a></li>
+    <li><a href="#diaspora-map"><span class="nav-num">03</span> Diaspora Map</a></li>
+    <li><a href="#timeline"><span class="nav-num">04</span> Timeline</a></li>
+    <li><a href="#bibliography"><span class="nav-num">05</span> Bibliography</a></li>
+  </ul>
+  <div class="nav-meta">Research Companion<br>Spring 2026</div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-eyebrow">CULP 3101 · Bad Bunny, Poetry & Puerto Rico · Prof. Melinda González</div>
+    <h1 class="hero-title display">
+      <span class="hero-title-el">El</span>
+      Archivo
+    </h1>
+    <div class="hero-divider"></div>
+    <div class="hero-subtitle">An Interactive Bad Bunny Lyric Analyzer — Full Research Companion</div>
+    <div class="hero-byline">Chloe Meuse &nbsp;·&nbsp; Spring 2026</div>
+    <div class="hero-flag">
+      <span class="f1"></span><span class="f2"></span><span class="f3"></span><span class="f4"></span><span class="f5"></span>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 1: LYRIC THEATER
+═══════════════════════════════════════════════ -->
+<section id="lyric-theater" class="section-wrap">
+  <div class="container">
+
+    <div class="section-label reveal">
+      <span class="section-num">01</span>
+      <div>
+        <div class="section-title display">Lyric Theater</div>
+        <div class="section-desc">Theme-coded lyrics with historical & political annotations · 14 songs selected</div>
+      </div>
+    </div>
+    <div class="section-rule reveal"></div>
+
+    <div class="intro-callout reveal">
+      The Lyric Theater is the site's close-reading hub. Click any song to expand its annotations. Each entry includes key lyric fragments, historical context, and cross-references to course texts.
+      <div class="fw-chips stagger">
+        <span class="fw-chip A">A: Decolonial Poetry</span>
+        <span class="fw-chip B">B: Diaspora &amp; Migration</span>
+        <span class="fw-chip C">C: Gentrification &amp; Place</span>
+        <span class="fw-chip D">D: State Violence &amp; Resistance</span>
+        <span class="fw-chip E">E: Memory &amp; Futures</span>
+      </div>
+    </div>
+
+    <div class="songs-grid" id="songs-grid">
+
+      <!-- SONG 01 -->
+      <div class="song-card fw-A">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">01</div>
+          <div>
+            <div class="song-name">"Safaera"</div>
+            <div class="song-meta-line">
+              <span>YHLQMDLG</span><span class="song-dot">·</span>
+              <span>2020</span><span class="song-dot">·</span><span>9 min.</span>
+            </div>
+            <div class="song-badges"><span class="badge badge-A">A: Decolonial Poetry</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"Safaera, safaera, safaera / Tú no sabes ná' de mí, cabrona"</div>
+              <div class="lyric-en">"You know nothing about me — an assertion of opacity against any expectation of legibility."</div>
+              <div class="lyric-source">— Safaera (2020)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text">A nine-minute genre collage that samples across at least five distinct musical worlds — most prominently Missy Elliott's "Get Ur Freak On," Bob Marley's "Could You Be Loved," and Shaggy &amp; Rayvon's "Big Up," layered over classic dembow and perreo. The song enacts the <em>cimarronaje</em> of reggaetón: a fugitive practice of constant genre escape that refuses colonial classification. Each DJ scratch mirrors Puerto Rican code-switching — the refusal to settle into one register is itself political.</p>
+            <div class="anno-label">Cross-reference</div>
+            <p class="anno-text">Bad Bunny Syllabus microsyllabus on reggaetón history; Guimond on genre politics as decolonial practice.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 02 -->
+      <div class="song-card fw-A">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">02</div>
+          <div>
+            <div class="song-name">"Baile Inolvidable"</div>
+            <div class="song-meta-line"><span>Debí Tirar Más Fotos</span><span class="song-dot">·</span><span>2025</span><span class="song-dot">·</span><span>6 min.</span></div>
+            <div class="song-badges"><span class="badge badge-A">A: Decolonial Poetry</span><span class="badge badge-E">E: Memory</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"Gracias por enseñarme a bailar / Y a querer, que esto no se borra"</div>
+              <div class="lyric-en">"Thank you for teaching me to dance / And to love — this cannot be erased."</div>
+              <div class="lyric-source">— Baile Inolvidable (2025)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text">Six-minute salsa track featuring students from the <em>Escuela Libre de Música</em> in San Juan. Lyrics operate on a double register: ostensibly about heartbreak, but reread with Puerto Rico as the subject, it becomes a meditation on exile and the impossibility of forgetting home. Styled after Héctor Lavoe — a Nuyorican salsa singer — the form itself carries political weight. Salsa emerged from the 1960s–70s Nuyorican community as the sound of Puerto Rican survival in New York.</p>
+            <div class="anno-label">Cross-reference</div>
+            <p class="anno-text">Rodriguez-Madera et al. on Bad Bunny as cultural archive; Barreiro León on form as political choice; Nuyorican genealogy: Héctor Lavoe → El Gran Combo → DTMF.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 03 -->
+      <div class="song-card fw-A">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">03</div>
+          <div>
+            <div class="song-name">"MIA" ft. Drake</div>
+            <div class="song-meta-line"><span>X 100PRE</span><span class="song-dot">·</span><span>2018</span></div>
+            <div class="song-badges"><span class="badge badge-A">A: Decolonial Poetry</span><span class="badge badge-B">B: Diaspora</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"Tú eres mía, mía, mía / Tú eres mía, para siempre mía"</div>
+              <div class="lyric-en">"You are mine — possessive language that enacts linguistic ownership: this is my language, my register."</div>
+              <div class="lyric-source">— MIA (2018)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text">The collaboration with Drake stages Spanish and English in structural contrast — two parallel worlds that do not collapse into each other. Bad Bunny raps exclusively in Spanish against Drake's English verse. The Spanglish title "MIA" = Miami (U.S.) but also the Spanish "mía" (mine). This was the album that introduced a fully Spanish-language global star to English-language markets — a deliberate refusal to translate for mainstream accessibility.</p>
+            <div class="anno-label">Cross-reference</div>
+            <p class="anno-text">Barreiro León on code-switching and Spanglish politics; the broader X 100PRE project as language-sovereignty statement.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 04 -->
+      <div class="song-card fw-A">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">04</div>
+          <div>
+            <div class="song-name">"Callaíta"</div>
+            <div class="song-meta-line"><span>Single</span><span class="song-dot">·</span><span>May 2019</span></div>
+            <div class="song-badges"><span class="badge badge-A">A: Decolonial Poetry</span><span class="badge badge-D">D: Civic Resistance</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"Callaíta, tú eres mala / Pero me gustas así"</div>
+              <div class="lyric-en">"Quiet one, you are bad / But I like you that way — the silent woman who acts: refusal to perform legibility."</div>
+              <div class="lyric-source">— Callaíta (2019)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text">Released May 2019, two months before the Rosselló protests. The <em>perreo combativo</em> — women dancing perreo outside La Fortaleza as political protest — retroactively made "Callaíta" part of the protest soundtrack. A governor whose leaked chats showed contempt for women was confronted with women exercising bodily autonomy in public. Caribbean decolonial feminist scholars argue that joy in the face of colonial repression is itself resistance.</p>
+            <div class="anno-label">Cross-reference</div>
+            <p class="anno-text">Rodriguez-Madera et al. on perreo as political act; Guimond on the decolonial body.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 05 -->
+      <div class="song-card fw-B">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">05</div>
+          <div>
+            <div class="song-name">"NUEVAYoL"</div>
+            <div class="song-meta-line"><span>Debí Tirar Más Fotos</span><span class="song-dot">·</span><span>2025</span></div>
+            <div class="song-badges"><span class="badge badge-B">B: Diaspora &amp; Migration</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"NUEVAYoL, la gente te lleva en el corazón / Pero sigue soñando con volver al rincón"</div>
+              <div class="lyric-en">"New York, people carry you in their hearts / But they keep dreaming of returning to the corner — 'el rincón' is the irreducible unit of Puerto Rican place-memory."</div>
+              <div class="lyric-source">— NUEVAYoL (2025)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text">Opens DTMF by addressing the approximately one million Puerto Ricans in New York. Samples El Gran Combo de Puerto Rico's "Un Verano en Nueva York" and layers it over Dominican dembow — a gesture of pan-Caribbean solidarity. Music video released July 4, 2025: Bad Bunny dances inside the Statue of Liberty with a Puerto Rican flag draped over the crown, transforming Independence Day into a confrontation with colonial reality.</p>
+            <div class="anno-label">Cross-reference</div>
+            <p class="anno-text">Barreiro León on Nuyorican identity politics; Nuyorican literary genealogy: Piri Thomas, Pedro Pietri, Miguel Piñero, Nuyorican Poets Cafe.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 06 -->
+      <div class="song-card fw-B">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">06</div>
+          <div>
+            <div class="song-name">"Voy a LLeVARte Pa PR"</div>
+            <div class="song-meta-line"><span>Debí Tirar Más Fotos</span><span class="song-dot">·</span><span>2025</span></div>
+            <div class="song-badges"><span class="badge badge-B">B: Diaspora &amp; Migration</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"Te voy a llevar pa' Puerto Rico / Pa' que tú conozcas lo que es bueno"</div>
+              <div class="lyric-en">"I'm going to take you to Puerto Rico / So you can know what's good — a reversal of the migration script."</div>
+              <div class="lyric-source">— Voy a LLeVARte Pa PR (2025)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text">Track two of DTMF immediately repositions the album after "NUEVAYoL." Together these two songs form a deliberate diptych: the album honors the diaspora first, then calls them home. Puerto Rico as destination rather than departure inverts the typical directionality of diaspora narrative — after honoring the life built abroad, DTMF argues the island is worth returning to. Annotate alongside "NUEVAYoL" as an inseparable pair.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 07 -->
+      <div class="song-card fw-B">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">07</div>
+          <div>
+            <div class="song-name">"Estamos Bien"</div>
+            <div class="song-meta-line"><span>X 100PRE</span><span class="song-dot">·</span><span>2018</span></div>
+            <div class="song-badges"><span class="badge badge-B">B: Diaspora</span><span class="badge badge-D">D: Resistance</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"Estamos bien, pa' los que preguntan / Estamos bien, aunque nos faltan cosas"</div>
+              <div class="lyric-en">"We are fine, for those who ask / We are fine, even though we are missing things — defiant affirmation that contains the full weight of what has been lost."</div>
+              <div class="lyric-source">— Estamos Bien (2018)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text">Released in the year after Hurricane Maria. "Estamos bien" became a collective coping mechanism — an act of refusal to be seen as victim. The government's death toll stood at 64 for nearly a year before researchers established it at 2,975. Bad Bunny's Tonight Show performance stated: <strong>"After one year of the hurricane, there's still people without electricity — more than 3,000 people died, and Trump is still in denial."</strong> His political voice breaking into American consciousness for the first time.</p>
+            <div class="anno-label">Cross-reference</div>
+            <p class="anno-text">Rodriguez-Madera et al. on disaster and cultural response; Harvard NEJM study (2018) on Maria death toll.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 08 -->
+      <div class="song-card fw-C">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">08</div>
+          <div>
+            <div class="song-name">"El Apagón"</div>
+            <div class="song-meta-line"><span>Un Verano Sin Ti</span><span class="song-dot">·</span><span>2022</span><span class="song-dot">·</span><span>w/ documentary: <em>Aquí Vive Gente</em></span></div>
+            <div class="song-badges"><span class="badge badge-C">C: Gentrification</span><span class="badge badge-D">D: Resistance</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"Si no quieres ver a Puerto Rico florecer / Vete pa' la puta, yo me quedo aquí"</div>
+              <div class="lyric-en">"If you don't want to see Puerto Rico flourish / Get the fuck out — I'm staying here."</div>
+              <div class="lyric-source">— El Apagón (2022)</div>
+            </div>
+            <div class="lyric-block">
+              <div class="lyric-es">"No me quiero ir de aquí, que se vayan ellos / Lo que es mío lo cogen prestado"</div>
+              <div class="lyric-en">"I don't want to leave here, let them go / What is mine they take on loan." — Sung by Gabriela Berlingeri in the outro.</div>
+              <div class="lyric-source">— El Apagón outro (2022)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text"><strong>LUMA Energy:</strong> In June 2021, Puerto Rico handed over power transmission to LUMA Energy, a private Canadian-American consortium. Blackouts increased; rates rose. Bad Bunny called out LUMA and Governor Pierluisi directly at Choliseo in July 2022. <strong>Act 60 (formerly Acts 20/22):</strong> Tax incentives offering near-zero capital gains taxes to Americans who establish Puerto Rico residency — driving displacement in Santurce, Rincón, and Puerta de Tierra. The 22-minute documentary <em>Aquí Vive Gente</em> features investigative journalist Bianca Graulau and documents these policies directly.</p>
+            <div class="anno-label">Academic Source</div>
+            <p class="anno-text">IASPM Journal: "Cultural Identity, Colonialism, and Gentrification in Puerto Rico: Bad Bunny's El Apagón as a Case Study."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 09 -->
+      <div class="song-card fw-C">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">09</div>
+          <div>
+            <div class="song-name">"Lo Que Le Pasó a Hawaii"</div>
+            <div class="song-meta-line"><span>Debí Tirar Más Fotos</span><span class="song-dot">·</span><span>2025</span></div>
+            <div class="song-badges"><span class="badge badge-C">C: Gentrification</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"Que no nos pase lo que le pasó a Hawaii / Que nuestra gente salga a votar aquí"</div>
+              <div class="lyric-en">"May what happened to Hawaii not happen to us / May our people come out to vote here — an explicitly anti-statehood statement invoking Hawaii as cautionary precedent."</div>
+              <div class="lyric-source">— Lo Que Le Pasó a Hawaii (2025)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text">Draws a direct line between Puerto Rico's displacement crisis and Hawaii's experience of Americanization: suppression of indigenous language, privatization of land, conversion to a tourist economy. Hawaii became the 50th state in 1959 after U.S. colonial administration that displaced Native Hawaiians. Bad Bunny's lyric frames statehood as a life-or-death question for Puerto Rican cultural survival. The accompanying short film shows filmmaker Jacobo Morales wandering a gentrified neighborhood he no longer recognizes.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 10 -->
+      <div class="song-card fw-C">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">10</div>
+          <div>
+            <div class="song-name">"La Mudanza"</div>
+            <div class="song-meta-line"><span>Debí Tirar Más Fotos</span><span class="song-dot">·</span><span>2025</span></div>
+            <div class="song-badges"><span class="badge badge-C">C: Gentrification</span><span class="badge badge-E">E: Memory</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"De aquí nadie me saca, de aquí yo no me muevo / Dile que esta es mi casa donde nació mi abuelo"</div>
+              <div class="lyric-en">"No one will kick me out of here / Tell them this is my home where my grandfather was born — genealogy as title deed."</div>
+              <div class="lyric-source">— La Mudanza (2025)</div>
+            </div>
+            <div class="lyric-block">
+              <div class="lyric-es">"Murieron por cargar la bandera nuestra / Los mataron por gritar que somos libres"</div>
+              <div class="lyric-en">"They died for carrying our flag / They were killed for shouting that we are free — reference to the 1948 Gag Law."</div>
+              <div class="lyric-source">— La Mudanza (2025)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text"><strong>Law 53 of 1948 (the "Gag Law"):</strong> Made it a felony to display a Puerto Rican flag, sing a patriotic tune, or write against the U.S. government. Enforced against the Nationalist Party; remained on the books until 1957. "La Mudanza" connects this history directly to contemporary anti-displacement politics — the right to <em>stay on the island</em> as the successor political claim to the right to carry the flag. The closing track of DTMF ends the album as a declaration of refusal.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 11 -->
+      <div class="song-card fw-D">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">11</div>
+          <div>
+            <div class="song-name">"Afilando los Cuchillos" ft. Residente &amp; iLe</div>
+            <div class="song-meta-line"><span>Single</span><span class="song-dot">·</span><span>July 17, 2019</span></div>
+            <div class="song-badges"><span class="badge badge-D">D: State Violence &amp; Resistance</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"Estamos afilando los cuchillos / Pa' sacar la hierba mala del bohío"</div>
+              <div class="lyric-en">"We are sharpening the knives / To pull the weeds from the homestead — 'bohío' (Taíno dwelling) grounds resistance in Indigenous history."</div>
+              <div class="lyric-source">— Afilando los Cuchillos (2019)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text"><strong>"Telegramgate" / RickyLeaks:</strong> On July 13, 2019, the Centro de Periodismo Investigativo published ~900 pages of chats between Governor Rosselló and 11 aides — jokes mocking the 2,975 Maria dead, homophobic slurs, misogynistic attacks, corruption references. Released four days after the scandal broke, this song became the protest anthem within hours. Bad Bunny flew back from his European tour. An estimated 500,000 people marched on July 22. Rosselló resigned on July 24 — seven days after the song dropped. <em>The diss-track form is itself a political choice: it personalizes and humiliates with precision.</em></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 12 -->
+      <div class="song-card fw-D">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">12</div>
+          <div>
+            <div class="song-name">"Yo Perreo Sola"</div>
+            <div class="song-meta-line"><span>YHLQMDLG</span><span class="song-dot">·</span><span>2020</span></div>
+            <div class="song-badges"><span class="badge badge-D">D: Resistance</span><span class="badge badge-A">A: Decolonial Poetry</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"Ella baila sola / Y a ella le gusta, no necesita a nadie"</div>
+              <div class="lyric-en">"She dances alone / And she likes it — the right to occupy public space on one's own terms."</div>
+              <div class="lyric-source">— Yo Perreo Sola (2020)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text">Music video featured Bad Bunny in full drag — prosthetic female body, heels — performing the song. Released in the context of Puerto Rico's femicide crisis. <strong>Alexa Neulisa Luciano Ruiz</strong> was murdered in Toa Baja on February 24, 2020. Police and media repeatedly misgendered her. Bad Bunny's Tonight Show appearance March 4, 2020 — wearing a shirt reading <strong>"MATARON A ALEXA, NO A UN HOMBRE CON FALDA"</strong> — broadcast a trans rights statement to millions of American viewers. Puerto Rico declared femicide a state of emergency in January 2021.</p>
+            <div class="anno-label">Cross-reference</div>
+            <p class="anno-text">Duquesne University dissertation: "Analyzing Decolonial Subjectivities in Reggaeton and Latin-Trap Music" — analyzes "Yo Perreo Sola" as a feminist decolonial text.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 13 -->
+      <div class="song-card fw-E">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">13</div>
+          <div>
+            <div class="song-name">"Debí Tirar Más Fotos" (title track)</div>
+            <div class="song-meta-line"><span>Debí Tirar Más Fotos</span><span class="song-dot">·</span><span>2025</span></div>
+            <div class="song-badges"><span class="badge badge-E">E: Memory &amp; Decolonial Futures</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"Debí tirar más fotos / Guardar más momentos"</div>
+              <div class="lyric-en">"I should have taken more photos / Saved more moments — the archive as decolonial practice; documentation against erasure."</div>
+              <div class="lyric-source">— Debí Tirar Más Fotos (2025)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text">Ostensibly about not documenting a love story enough; in context, it is a meditation on failing to document a Puerto Rico being erased: neighborhoods gentrified, communities displaced, cultural life commodified. The YouTube visualizers for all 17 DTMF tracks, produced with historian <strong>Jorell Meléndez-Badillo</strong>, compile Puerto Rican history alongside each song — turning the album's digital release into an educational archive. Note: EL ARCHIVO itself is an enactment of the album's thesis — this project <em>is</em> taking more photos.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONG 14 -->
+      <div class="song-card fw-E">
+        <div class="song-header" onclick="toggleSong(this)">
+          <div class="song-number mono">14</div>
+          <div>
+            <div class="song-name">"El Mundo Es Mío"</div>
+            <div class="song-meta-line"><span>Single (SoundCloud)</span><span class="song-dot">·</span><span>2016</span></div>
+            <div class="song-badges"><span class="badge badge-E">E: Memory &amp; Decolonial Futures</span></div>
+          </div>
+          <div class="song-toggle-icon">▾</div>
+        </div>
+        <div class="song-body">
+          <div class="song-body-inner">
+            <div class="lyric-block">
+              <div class="lyric-es">"El mundo es mío y todavía no lo saben"</div>
+              <div class="lyric-en">"The world is mine and they don't know it yet — the most compressed statement of the decolonial subject's position."</div>
+              <div class="lyric-source">— El Mundo Es Mío (2016)</div>
+            </div>
+            <div class="anno-label">Annotation Notes</div>
+            <p class="anno-text">Self-produced and uploaded to SoundCloud while Bad Bunny was still working as a supermarket bagger in Bayamón. The form of release mirrors the bootleg, DIY circulation of early reggaetón on mix CDs — taking the means of distribution. As the earliest track in the EL ARCHIVO corpus, it establishes the "before" against which the whole political arc can be measured. Read alongside "Debí Tirar Más Fotos" (2025) as a temporal diptych: the assertion before the world agrees (2016) and the retrospective grief at not having documented the world you were insisting was yours (2025).</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /songs-grid -->
+  </div><!-- /container -->
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 2: CONSTELLATION
+═══════════════════════════════════════════════ -->
+<section id="constellation" class="constellation-section">
+  <div class="container">
+
+    <div class="section-label reveal">
+      <span class="section-num">02</span>
+      <div>
+        <div class="section-title display">Constellation View</div>
+        <div class="section-desc">Songs as stars, frameworks as nebulae — thematic edges as light between worlds</div>
+      </div>
+    </div>
+    <div class="section-rule reveal"></div>
+
+    <div class="intro-callout reveal">
+      The Constellation View renders the 14 songs as nodes in a force-directed star map. Each song gravitates toward its primary framework hub. Connections represent shared arguments — the political case emerges from the <em>density of edges</em>, not any single song. Hover to illuminate connections.
+    </div>
+
+    <div style="position:relative;" class="reveal">
+      <svg id="constellation-svg"></svg>
+      <div class="const-tooltip" id="const-tooltip">
+        <div class="const-tooltip-title" id="tt-title"></div>
+        <div class="const-tooltip-meta" id="tt-meta"></div>
+        <div class="const-tooltip-edge" id="tt-edge"></div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--cream);margin:4rem 0 1.5rem;" class="reveal">Key Edge Relationships</h3>
+
+    <div class="edge-grid stagger">
+      <div class="edge-card">
+        <div class="edge-card-title">El Apagón <span class="arrow">↔</span> Lo Que Le Pasó a Hawaii</div>
+        <p>Shared argument: colonial extraction as spatial practice. Both identify a U.S. policy as the mechanism of displacement — the darkened island, the Hawaiianized island. Edge label: <em>colonial dispossession</em>.</p>
+      </div>
+      <div class="edge-card">
+        <div class="edge-card-title">Afilando los Cuchillos <span class="arrow">↔</span> Estamos Bien</div>
+        <p>Shared reference: Hurricane Maria's political aftermath. "Estamos Bien" documents survival and neglect. "Afilando" documents the explosion when chats revealed Rosselló mocking the Maria dead. Edge label: <em>Maria → accountability</em>.</p>
+      </div>
+      <div class="edge-card">
+        <div class="edge-card-title">NUEVAYoL <span class="arrow">↔</span> Voy a LLeVARte Pa PR</div>
+        <p>Structural relationship: deliberate diptych opening DTMF. One faces the diaspora (New York); the other faces the island. Edge label: <em>diaspora circuit</em>.</p>
+      </div>
+      <div class="edge-card">
+        <div class="edge-card-title">Yo Perreo Sola <span class="arrow">↔</span> Callaíta</div>
+        <p>"Callaíta" (May 2019) circulated during the perreo combativo protests. "Yo Perreo Sola" (2020) makes the feminist claim explicit. Together they trace the trajectory of the female dancing body from background to foreground. Edge label: <em>perreo as resistance</em>.</p>
+      </div>
+      <div class="edge-card">
+        <div class="edge-card-title">Safaera <span class="arrow">↔</span> Baile Inolvidable</div>
+        <p>Formal relationship: both use music-historical reference as the primary political gesture. "Safaera" compresses reggaetón history; "Baile Inolvidable" compresses salsa/diaspora history. Both say: <em>we remember where this came from</em>.</p>
+      </div>
+      <div class="edge-card">
+        <div class="edge-card-title">Debí Tirar Más Fotos <span class="arrow">↔</span> El Mundo Es Mío</div>
+        <p>Temporal arc: the earliest track (2016) and the title track (2025) frame the full nine-year political project. The assertion before the world agrees; the retrospective grief at not having documented the world you were insisting was yours. Edge label: <em>the archive begins here</em>.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 3: DIASPORA MAP
+═══════════════════════════════════════════════ -->
+<section id="diaspora-map" class="globe-section">
+  <div class="container">
+
+    <div class="section-label reveal">
+      <span class="section-num">03</span>
+      <div>
+        <div class="section-title display">Diaspora Map</div>
+        <div class="section-desc">12 geographic pins · Puerto Rico / U.S. Mainland / Historical Sites</div>
+      </div>
+    </div>
+    <div class="section-rule reveal"></div>
+
+    <div class="intro-callout reveal">
+      Each pin contains coordinates, the songs it is drawn from, a key lyric fragment, and an annotation explaining the geographic and political significance. Drag the globe to explore. Click any pin to load its full annotation in the panel.
+    </div>
+
+    <div class="globe-layers reveal stagger">
+      <button class="layer-btn active" data-layer="all" onclick="setLayer(this,'all')">All Pins</button>
+      <button class="layer-btn" data-layer="pr" onclick="setLayer(this,'pr')">Puerto Rico</button>
+      <button class="layer-btn" data-layer="us" onclick="setLayer(this,'us')">U.S. Mainland</button>
+      <button class="layer-btn" data-layer="hist" onclick="setLayer(this,'hist')">Historical Sites</button>
+    </div>
+
+    <div class="globe-layout">
+      <div class="globe-container">
+        <svg id="globe-svg"></svg>
+        <div class="globe-hint mono">drag to rotate · click a pin for details</div>
+      </div>
+      <div class="pin-panel">
+        <div class="pin-panel-empty" id="pin-empty">
+          <div class="pin-icon">✦</div>
+          Select a location on the globe to view its lyric annotation and political context.
+        </div>
+        <div class="pin-detail" id="pin-detail">
+          <div class="pin-detail-location" id="pd-layer"></div>
+          <div class="pin-detail-name" id="pd-name"></div>
+          <div class="pin-detail-coords mono" id="pd-coords"></div>
+          <div class="pin-detail-songs" id="pd-songs"></div>
+          <div class="pin-detail-lyric" id="pd-lyric"></div>
+          <div class="pin-detail-anno" id="pd-anno"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 4: POLITICAL TIMELINE
+═══════════════════════════════════════════════ -->
+<section id="timeline" class="timeline-section">
+  <div class="container">
+
+    <div class="section-label reveal">
+      <span class="section-num">04</span>
+      <div>
+        <div class="section-title display">Political Timeline</div>
+        <div class="section-desc">Puerto Rican political events 2016–2026 in parallel with Bad Bunny's discography</div>
+      </div>
+    </div>
+    <div class="section-rule reveal"></div>
+
+    <div class="intro-callout reveal">
+      Two parallel tracks: <span style="color:var(--fw-A);font-weight:600;">Political Events</span> on the left and <span style="color:var(--red);font-weight:600;">Bad Bunny Releases</span> on the right. Every node is annotated. The timeline's argument is in the <em>proximity</em> of events to releases — the music is always responding to something real.
+    </div>
+
+    <div class="timeline-legend reveal">
+      <div class="tl-legend-item"><div class="tl-legend-dot event"></div><span style="color:var(--fw-A)">Political Events</span></div>
+      <div class="tl-legend-item"><div class="tl-legend-dot release"></div><span style="color:var(--red)">Bad Bunny Releases</span></div>
+    </div>
+
+    <div class="timeline" id="timeline-body">
+
+      <!-- 2016 -->
+      <div class="tl-year-marker">
+        <div class="tl-year-num display">2016</div>
+      </div>
+      <div class="tl-entry event">
+        <div class="tl-card">
+          <div class="tl-card-type">Political Event</div>
+          <div class="tl-card-title">PROMESA Signed (June 30, 2016)</div>
+          <p class="tl-card-body">Congress created <strong>La Junta</strong> — an unelected fiscal oversight board with broad authority over Puerto Rico's budget. Critics called it an extension of colonial control, removing democratic authority from elected officials. Puerto Rico carried $72 billion in public debt.</p>
+        </div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-spacer"></div>
+      </div>
+      <div class="tl-entry release">
+        <div class="tl-spacer"></div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-card">
+          <div class="tl-card-type">Bad Bunny Release</div>
+          <div class="tl-card-title">"El Mundo Es Mío" — SoundCloud single</div>
+          <p class="tl-card-body">First viral track, self-uploaded while working as a supermarket bagger. "The World Is Mine" — the opening declaration of a decade-long political project: the assertion of Puerto Rican selfhood against a system that denied it. Released the same year democratic authority was most explicitly overridden.</p>
+        </div>
+      </div>
+
+      <!-- 2017 -->
+      <div class="tl-year-marker">
+        <div class="tl-year-num display">2017</div>
+      </div>
+      <div class="tl-entry event">
+        <div class="tl-card">
+          <div class="tl-card-type">Political Event</div>
+          <div class="tl-card-title">Hurricane Maria (September 20, 2017)</div>
+          <p class="tl-card-body">Category 4 storm devastates Puerto Rico: <strong>2,975 deaths</strong> (suppressed to 64 for nearly a year), $91.6 billion in damage, entire power grid destroyed, 11 months to full restoration. 135,000+ Puerto Ricans emigrate to the mainland. Trump visits briefly, throws paper towels at a crowd.</p>
+        </div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-spacer"></div>
+      </div>
+      <div class="tl-entry release">
+        <div class="tl-spacer"></div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-card">
+          <div class="tl-card-type">Bad Bunny Release</div>
+          <div class="tl-card-title">No major release — Somos Live! benefit concert</div>
+          <p class="tl-card-body">Participated in hurricane relief telethon wearing a shirt reading <strong>"¿Eres Twitero o Presidente?"</strong> criticizing Trump's Twitter activity during the emergency. The absence of a full release is itself significant on the timeline: the island was not in a position to celebrate.</p>
+        </div>
+      </div>
+
+      <!-- 2018 -->
+      <div class="tl-year-marker">
+        <div class="tl-year-num display">2018</div>
+      </div>
+      <div class="tl-entry event">
+        <div class="tl-card">
+          <div class="tl-card-type">Political Event</div>
+          <div class="tl-card-title">Maria Death Toll Cover-Up Exposed</div>
+          <p class="tl-card-body">Harvard NEJM study (August 2018) estimates 4,645 deaths. September 2018 government-commissioned study confirms 2,975. Governor Rosselló accepts new figure after nearly a year of denial. The cover-up of mass death became the central grievance fueling the 2019 protests.</p>
+        </div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-spacer"></div>
+      </div>
+      <div class="tl-entry release">
+        <div class="tl-spacer"></div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-card">
+          <div class="tl-card-type">Bad Bunny Release</div>
+          <div class="tl-card-title">X 100PRE — "Estamos Bien" (December 24, 2018)</div>
+          <p class="tl-card-body">Debut album released Christmas Eve as the death toll cover-up was being publicly reckoned with. Tonight Show performance opened: <strong>"After one year of the hurricane, there's still people without electricity — more than 3,000 people died, and Trump is still in denial."</strong> Bad Bunny's political voice breaks into American consciousness for the first time.</p>
+        </div>
+      </div>
+
+      <!-- 2019 -->
+      <div class="tl-year-marker">
+        <div class="tl-year-num display">2019</div>
+      </div>
+      <div class="tl-entry event">
+        <div class="tl-card">
+          <div class="tl-card-type">Political Event</div>
+          <div class="tl-card-title">Kevin Fret Murdered (January 10, 2019)</div>
+          <p class="tl-card-body">Puerto Rico's first openly gay trap artist shot and killed in Santurce. Bad Bunny and Residente stood outside La Fortaleza the same day demanding accountability for violence. The murder catalyzed the connection between LGBTQ+ rights and the broader civic movement.</p>
+        </div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-spacer"></div>
+      </div>
+      <div class="tl-entry release">
+        <div class="tl-spacer"></div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-card">
+          <div class="tl-card-type">Bad Bunny Release</div>
+          <div class="tl-card-title">"Callaíta" — Single (May 2019)</div>
+          <p class="tl-card-body">Released two months before the protests. Became part of the perreo combativo soundtrack when women used the dance as protest outside La Fortaleza in July. The political meaning accrued retroactively through the protests.</p>
+        </div>
+      </div>
+      <div class="tl-entry event">
+        <div class="tl-card">
+          <div class="tl-card-type">Political Event</div>
+          <div class="tl-card-title">"RickyLeaks" / Telegramgate &amp; Rosselló Resignation (July 13–24)</div>
+          <p class="tl-card-body">July 13: CPI publishes ~900 pages of chats — jokes mocking Maria dead, homophobic slurs, corruption references. Ten days of protests; <strong>~500,000 people march July 22</strong> — largest in Puerto Rican history. July 24: Rosselló announces resignation. Effective August 2.</p>
+        </div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-spacer"></div>
+      </div>
+      <div class="tl-entry release">
+        <div class="tl-spacer"></div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-card">
+          <div class="tl-card-type">Bad Bunny Release</div>
+          <div class="tl-card-title">"Afilando los Cuchillos" ft. Residente &amp; iLe (July 17, 2019)</div>
+          <p class="tl-card-body">Released <strong>four days</strong> after RickyLeaks broke. Bad Bunny flew back from his European tour. Circulated via WhatsApp across the island within hours. Became the official protest anthem. Rosselló resigned seven days later. The most direct relationship between a release and a political event in the full timeline.</p>
+        </div>
+      </div>
+
+      <!-- 2020 -->
+      <div class="tl-year-marker">
+        <div class="tl-year-num display">2020</div>
+      </div>
+      <div class="tl-entry event">
+        <div class="tl-card">
+          <div class="tl-card-type">Political Event</div>
+          <div class="tl-card-title">Earthquake Sequence &amp; Alexa Luciano Ruiz Murdered</div>
+          <p class="tl-card-body">6.4 magnitude earthquake near Guánica collapses power grid for the third time in three years (Jan 7). Feb 24: Trans woman <strong>Alexa Neulisa Luciano Ruiz</strong> shot in Toa Baja; police and media repeatedly misgender her. Bad Bunny's Tonight Show appearance March 4 features shirt: <strong>"MATARON A ALEXA, NO A UN HOMBRE CON FALDA."</strong></p>
+        </div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-spacer"></div>
+      </div>
+      <div class="tl-entry release">
+        <div class="tl-spacer"></div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-card">
+          <div class="tl-card-type">Bad Bunny Release</div>
+          <div class="tl-card-title">YHLQMDLG — "Yo Perreo Sola" (February 29, 2020)</div>
+          <p class="tl-card-body">Released Leap Day, two days before the Tonight Show / Alexa shirt moment. Becomes Spotify's <strong>most-streamed album globally in 2020</strong>. "Yo Perreo Sola" and its drag video argue for every woman's right to occupy public space on her own terms — in direct conversation with Puerto Rico's femicide crisis.</p>
+        </div>
+      </div>
+
+      <!-- 2021 -->
+      <div class="tl-year-marker">
+        <div class="tl-year-num display">2021</div>
+      </div>
+      <div class="tl-entry event">
+        <div class="tl-card">
+          <div class="tl-card-type">Political Event</div>
+          <div class="tl-card-title">LUMA Energy Takes Over Power Grid (June 1, 2021)</div>
+          <p class="tl-card-body"><strong>LUMA Energy</strong> — private Canadian-American consortium — begins operating Puerto Rico's transmission and distribution system. 15-year contract, $2.4 billion. Blackouts increase, rates rise. January 2021: Puerto Rico's governor declares state of emergency over femicide, connected to advocacy by Bad Bunny and iLe.</p>
+        </div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-spacer"></div>
+      </div>
+
+      <!-- 2022 -->
+      <div class="tl-year-marker">
+        <div class="tl-year-num display">2022</div>
+      </div>
+      <div class="tl-entry event">
+        <div class="tl-card">
+          <div class="tl-card-type">Political Event</div>
+          <div class="tl-card-title">Ex-Governor Vázquez Arrested &amp; Hurricane Fiona (Sept 2022)</div>
+          <p class="tl-card-body">Former Governor Wanda Vázquez arrested on federal bribery charges — first former Puerto Rican governor to face federal criminal charges. Hurricane Fiona: record rainfall, <strong>complete island-wide blackout</strong>, $3.2 billion in damage. LUMA's failure to maintain the grid widely blamed.</p>
+        </div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-spacer"></div>
+      </div>
+      <div class="tl-entry release">
+        <div class="tl-spacer"></div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-card">
+          <div class="tl-card-type">Bad Bunny Release</div>
+          <div class="tl-card-title">Un Verano Sin Ti — "El Apagón" (May 6, 2022)</div>
+          <p class="tl-card-body"><strong>Most streamed album globally in 2022</strong> (IFPI). "El Apagón" directly targets LUMA and Governor Pierluisi; the 22-min. documentary <em>Aquí Vive Gente</em> addresses gentrification and Act 60. First Spanish-language album nominated for Grammy Album of the Year. Bad Bunny calls out LUMA from the stage at Choliseo in July 2022.</p>
+        </div>
+      </div>
+
+      <!-- 2024–2025 -->
+      <div class="tl-year-marker">
+        <div class="tl-year-num display">2024–25</div>
+      </div>
+      <div class="tl-entry event">
+        <div class="tl-card">
+          <div class="tl-card-type">Political Event</div>
+          <div class="tl-card-title">2024 Puerto Rico Gubernatorial Election</div>
+          <p class="tl-card-body">Bad Bunny publicly endorses <strong>Juan Dalmau</strong> of the Puerto Rican Independence Party — the first time in decades an independence candidate received such prominent celebrity support. Dalmau's platform: independence, anti-corruption, opposition to Act 60 and La Junta.</p>
+        </div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-spacer"></div>
+      </div>
+      <div class="tl-entry release">
+        <div class="tl-spacer"></div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-card">
+          <div class="tl-card-type">Bad Bunny Release</div>
+          <div class="tl-card-title">Debí Tirar Más Fotos (January 5, 2025)</div>
+          <p class="tl-card-body">Sixth studio album released two weeks before Trump's second inauguration. Blends plena, salsa, bomba, jíbaro, dembow. YouTube visualizers (w/ historian Jorell Meléndez-Badillo) provide full Puerto Rican history lesson. Wins <strong>Grammy for Album of the Year (68th Grammys)</strong> — first Spanish-language album in history to win. Bad Bunny dedicates the award to Puerto Rico.</p>
+        </div>
+      </div>
+      <div class="tl-entry event">
+        <div class="tl-card">
+          <div class="tl-card-type">Political Event</div>
+          <div class="tl-card-title">Super Bowl LX Halftime Show (February 8, 2026)</div>
+          <p class="tl-card-body">Bad Bunny performs at Super Bowl LX in Santa Clara, California (Levi's Stadium). Had initially removed all U.S. tour dates to protect fans from ICE targeting; accepted Super Bowl invitation explicitly as protest. <strong>"El Apagón" performed in full</strong> — lyrics about LUMA Energy and displacement broadcast to 100+ million viewers.</p>
+        </div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-spacer"></div>
+      </div>
+      <div class="tl-entry event">
+        <div class="tl-card">
+          <div class="tl-card-type">Political Event</div>
+          <div class="tl-card-title">ICE Raids in Puerto Rico (June 2025)</div>
+          <p class="tl-card-body">Bad Bunny posts video criticizing ICE deportation operations in Puerto Rico — a U.S. territory whose residents are American citizens. The contradiction: U.S. immigration enforcement targeting constitutionally American citizens exposes the colonial logic that treats Puerto Ricans as perpetual foreigners in their own homeland.</p>
+        </div>
+        <div class="tl-center"><div class="tl-node"></div></div>
+        <div class="tl-spacer"></div>
+      </div>
+
+    </div><!-- /timeline -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 5: BIBLIOGRAPHY
+═══════════════════════════════════════════════ -->
+<section id="bibliography" class="bib-section">
+  <div class="container">
+
+    <div class="section-label reveal">
+      <span class="section-num">05</span>
+      <div>
+        <div class="section-title display">Bibliography &amp; Source Notes</div>
+        <div class="section-desc">Academic texts · journalism · archival sources</div>
+      </div>
+    </div>
+    <div class="section-rule reveal"></div>
+
+    <div class="reveal">
+      <div class="bib-category">Primary Academic Sources (Course Texts)</div>
+      <div class="bib-entry">Rodriguez-Madera, Sheilla et al. <em>The Bad Bunny Enigma.</em> [Primary framework source for all five analytical lenses used throughout EL ARCHIVO.]</div>
+      <div class="bib-entry">Barreiro León. [Course text — diaspora and language frameworks; cited in Lyric Theater annotations for "NUEVAYoL" and "MIA."]</div>
+      <div class="bib-entry">Guimond. [Course text — genre politics framework; cited in "Safaera" annotations.]</div>
+
+      <div class="bib-category">Peer-Reviewed Academic Sources</div>
+      <div class="bib-entry">IASPM Journal. "Cultural Identity, Colonialism, and Gentrification in Puerto Rico: Bad Bunny's El Apagón as a Case Study." <em>IASPM Journal,</em> 2023. <a href="https://iaspmjournal.net/index.php/IASPM_Journal/article/view/1397" target="_blank">↗ Link</a></div>
+      <div class="bib-entry">Duquesne University. "Analyzing Decolonial Subjectivities in Reggaeton and Latin-Trap Music in Puerto Rico: A Critical Discourse Analysis." Doctoral dissertation. <a href="https://dsc.duq.edu/etd/2320/" target="_blank">↗ Link</a></div>
+
+      <div class="bib-category">Journalism &amp; Web Sources</div>
+      <div class="bib-entry">The Bad Bunny Syllabus. <a href="https://www.badbunnysyllabus.com/apagón-syllabus" target="_blank">badbunnysyllabus.com</a> — Microsyllabus on "El Apagón" with annotated lyrics and historical context.</div>
+      <div class="bib-entry">NPR Alt.Latino. "Afilando Los Cuchillos Soundtracks Puerto Rico's Social Movement In Real Time." July 25, 2019. <a href="https://www.npr.org/sections/altlatino/2019/07/25/744727518/afilando-los-cuchillos-soundtracks-puerto-rico-s-social-movement-in-real-time" target="_blank">↗ Link</a></div>
+      <div class="bib-entry">Left Voice. "Bad Bunny's New Album Yearns for Puerto Rican Freedom from U.S. Imperialism." January 2025. <a href="https://www.leftvoice.org/bad-bunnys-new-album-yearns-for-puerto-rican-freedom-from-u-s-imperialism/" target="_blank">↗ Link</a></div>
+      <div class="bib-entry">Convergence Magazine. "Bad Bunny's NUEVAYoL and the Decolonial Pulse of Pop Culture." <a href="https://convergencemag.com/articles/bad-bunny-nuevayol-decolonial-pop-culture/" target="_blank">↗ Link</a></div>
+      <div class="bib-entry">The Harvard Crimson. "Bad Bunny's Album is Talking About Us, Whether You Like It or Not." February 2025. <a href="https://www.thecrimson.com/article/2025/2/27/bad-bunny-gentrification/" target="_blank">↗ Link</a></div>
+      <div class="bib-entry">Rolling Stone. "'My People Need Me!!! And I Need Them': Bad Bunny's Political Awakening in Puerto Rico." <a href="https://www.rollingstone.com/music/music-latin/bad-bunny-politics-protests-pfknr-book-excerpt-1235504162/" target="_blank">↗ Link</a></div>
+      <div class="bib-entry">Georgetown SFS. "Bad Bunny at the Super Bowl: Five Questions for Melinda González About the Impact." 2026. <a href="https://sfs.georgetown.edu/news/bad-bunny-at-the-superbowl-five-questions-for-melinda-gonzalez-about-the-impact/" target="_blank">↗ Link</a> <strong>[Source by Prof. González — cite directly in annotations.]</strong></div>
+      <div class="bib-entry">Dazed. "How Bad Bunny Became a Political Icon." 2026. <a href="https://www.dazeddigital.com/music/article/69572/1/bad-bunny-became-political-icon-super-bowl-lx-ice-puerto-rico-trump-us" target="_blank">↗ Link</a></div>
+      <div class="bib-entry">CNN. "A Bad Bunny Rant, an Ex-Governor in Handcuffs and Puerto Rico Still Reels Nearly Five Years After Hurricane Maria." August 2022. <a href="https://edition.cnn.com/2022/08/13/americas/puerto-rico-corruption-bad-bunny-rant" target="_blank">↗ Link</a></div>
+      <div class="bib-entry">CNN. "Private Leaked Texts, Massive Protests and a Governor's Downfall: A Timeline of Puerto Rico's Political Unrest." July 2019. <a href="https://www.cnn.com/2019/07/27/us/puerto-rico-governor-scandal-timeline" target="_blank">↗ Link</a></div>
+      <div class="bib-entry">Teaching for Change. "Important Dates in Puerto Rican History." <a href="https://www.teachingforchange.org/important-dates-puerto-rican-history" target="_blank">↗ Link</a></div>
+      <div class="bib-entry">National Museum of American History / Smithsonian. "A History of Puerto Rico." <a href="https://americanhistory.si.edu/explore/projects/collective-care-puerto-rico/history" target="_blank">↗ Link</a></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div>
+    <div class="footer-brand"><em>EL</em> ARCHIVO</div>
+    <div class="footer-meta">Research Companion for CULP 3101: Bad Bunny, Poetry &amp; Puerto Rico<br>Chloe Meuse · Prof. Melinda González · Spring 2026</div>
+    <div class="footer-flag"><span class="f1"></span><span class="f2"></span><span class="f3"></span><span class="f4"></span><span class="f5"></span></div>
+  </div>
+  <div class="footer-right">
+    This document is a research companion<br>for the proposed EL ARCHIVO<br>interactive website.<br><br>
+    <span style="color:var(--red);">✦</span> Taking more photos.
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════
+//  D3 CONSTELLATION
+// ═══════════════════════════════════════════════════════
+(function buildConstellation() {
+  const svgEl = document.getElementById('constellation-svg');
+  if (!svgEl) return;
+
+  const W = svgEl.parentElement.clientWidth || 900;
+  const H = 600;
+  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  const svg = d3.select('#constellation-svg');
+
+  // Defs: glow filters
+  const defs = svg.append('defs');
+  ['A','B','C','D','E'].forEach(fw => {
+    const colors = {A:'96,165,250',B:'52,211,153',C:'251,191,36',D:'248,113,113',E:'192,132,252'};
+    const f = defs.append('filter').attr('id', `glow-${fw}`).attr('x','-50%').attr('y','-50%').attr('width','200%').attr('height','200%');
+    f.append('feGaussianBlur').attr('stdDeviation','4').attr('result','blur');
+    const m = f.append('feMerge');
+    m.append('feMergeNode').attr('in','blur');
+    m.append('feMergeNode').attr('in','SourceGraphic');
+  });
+
+  const fwColors = { A:'#60A5FA', B:'#34D399', C:'#FBBF24', D:'#F87171', E:'#C084FC' };
+  const fwNames  = { A:'Decolonial Poetry', B:'Diaspora & Migration', C:'Gentrification & Place', D:'State Violence & Resistance', E:'Memory & Futures' };
+
+  // Hub nodes (framework centers)
+  const cx = W/2, cy = H/2 - 20, r = Math.min(W,H) * 0.28;
+  const hubAngles = { A: -Math.PI/2, B: -Math.PI/2 + 2*Math.PI/5, C: -Math.PI/2 + 4*Math.PI/5, D: -Math.PI/2 + 6*Math.PI/5, E: -Math.PI/2 + 8*Math.PI/5 };
+
+  const hubs = Object.entries(hubAngles).map(([fw, a]) => ({
+    id: 'hub-'+fw, fw,
+    x: cx + r * Math.cos(a),
+    y: cy + r * Math.sin(a),
+    isHub: true,
+    label: fw,
+    fullName: fwNames[fw]
+  }));
+
+  const songs = [
+    { id:'safaera',    name:'"Safaera"',           album:'YHLQMDLG',  year:2020, fw:'A', edge:'Baile Inolvidable', spotifyUri:'spotify:track:4iJQ4wjGeektGK9GTwqPLt' },
+    { id:'baile',      name:'"Baile Inolvidable"',  album:'DTMF',      year:2025, fw:'A', edge:'Safaera, NUEVAYoL', spotifyUri:'spotify:track:5T21jCJvNfqOlCwNKD0OX0' },
+    { id:'mia',        name:'"MIA" ft. Drake',      album:'X 100PRE',  year:2018, fw:'A', edge:'NUEVAYoL', spotifyUri:'spotify:track:1HVlKsLOUinFJ1vCRwFYWQ' },
+    { id:'callaita',   name:'"Callaíta"',           album:'Single',    year:2019, fw:'A', edge:'Yo Perreo Sola', spotifyUri:'spotify:track:6xu11vacNk7F28V3G5ocx0' },
+    { id:'nuevayol',   name:'"NUEVAYoL"',           album:'DTMF',      year:2025, fw:'B', edge:'Voy a LLeVARte Pa PR', spotifyUri:'spotify:track:7hLgzIqLaTFDi61yiOtXgT' },
+    { id:'voy',        name:'"Voy a LLeVARte Pa PR"',album:'DTMF',     year:2025, fw:'B', edge:'NUEVAYoL, Estamos Bien', spotifyUri:'spotify:track:4VEBTvHNH4RkigMnpqN8GE' },
+    { id:'estamosbien',name:'"Estamos Bien"',       album:'X 100PRE',  year:2018, fw:'B', edge:'Afilando los Cuchillos', spotifyUri:'spotify:track:3VvtsZhp6YQJM2dv6WHBXR' },
+    { id:'elapagon',   name:'"El Apagón"',          album:'UVST',      year:2022, fw:'C', edge:'Lo Que Le Pasó a Hawaii', spotifyUri:'spotify:track:0U1Qd6uT9MHnuPHLDq4r6Y' },
+    { id:'hawaii',     name:'"Lo Que Le Pasó a Hawaii"',album:'DTMF',  year:2025, fw:'C', edge:'El Apagón, La Mudanza', spotifyUri:'spotify:track:6xzgfXi6xbJ8jqPYaA8Oei' },
+    { id:'mudanza',    name:'"La Mudanza"',         album:'DTMF',      year:2025, fw:'C', edge:'Lo Que Le Pasó a Hawaii', spotifyUri:'spotify:track:4HZKz9gxXTBQBYtxCTLQkE' },
+    { id:'afilando',   name:'"Afilando los Cuchillos"',album:'Single', year:2019, fw:'D', edge:'Estamos Bien, La Mudanza', spotifyUri:'spotify:track:3vICCy3smcyJWgIkOTZewp' },
+    { id:'yoperreo',   name:'"Yo Perreo Sola"',     album:'YHLQMDLG',  year:2020, fw:'D', edge:'Callaíta', spotifyUri:'spotify:track:2tNE4zHP5O0T9IO8ay6FLM' },
+    { id:'dtmf',       name:'"Debí Tirar Más Fotos"',album:'DTMF',     year:2025, fw:'E', edge:'El Mundo Es Mío', spotifyUri:'spotify:track:28lYjmP06fEqH6wXwWJCXY' },
+    { id:'mundo',      name:'"El Mundo Es Mío"',    album:'SoundCloud',year:2016, fw:'E', edge:'Debí Tirar Más Fotos', spotifyUri:'spotify:track:0Q3TZGGZRBcF7kqNJLT1LR' },
+  ];
+
+  // Position songs around their hub
+  const hubMap = {};
+  hubs.forEach(h => { hubMap[h.fw] = h; });
+  const songsByFw = {};
+  songs.forEach(s => {
+    if (!songsByFw[s.fw]) songsByFw[s.fw] = [];
+    songsByFw[s.fw].push(s);
+  });
+  Object.entries(songsByFw).forEach(([fw, arr]) => {
+    const hub = hubMap[fw];
+    const baseAngle = Math.atan2(hub.y - cy, hub.x - cx);
+    const spread = Math.PI * 0.55;
+    arr.forEach((s, i) => {
+      const frac = arr.length > 1 ? i / (arr.length - 1) : 0.5;
+      const angle = baseAngle - spread/2 + frac * spread + (Math.random()-0.5)*0.15;
+      const dist = 85 + Math.random() * 35;
+      s.x = hub.x + dist * Math.cos(angle);
+      s.y = hub.y + dist * Math.sin(angle);
+    });
+  });
+
+  // Cross-links between songs
+  const crossLinks = [
+    { source:'elapagon',   target:'hawaii' },
+    { source:'afilando',   target:'estamosbien' },
+    { source:'nuevayol',   target:'voy' },
+    { source:'callaita',   target:'yoperreo' },
+    { source:'safaera',    target:'baile' },
+    { source:'dtmf',       target:'mundo' },
+    { source:'mudanza',    target:'afilando' },
+    { source:'estamosbien',target:'voy' },
+    { source:'mia',        target:'nuevayol' },
+    { source:'hawaii',     target:'mudanza' },
+  ];
+
+  const allNodes = [...hubs, ...songs];
+  const nodeMap = {};
+  allNodes.forEach(n => { nodeMap[n.id] = n; });
+
+  // Hub-song links
+  const hubLinks = songs.map(s => ({ source: nodeMap['hub-'+s.fw], target: s, isHub: true }));
+  const crossLinkObjs = crossLinks.map(l => ({ source: nodeMap[l.source], target: nodeMap[l.target], isHub: false }));
+  const allLinks = [...hubLinks, ...crossLinkObjs];
+
+  // Background
+  svg.append('rect').attr('width', W).attr('height', H).attr('fill', 'transparent');
+
+  // Link layer
+  const linkG = svg.append('g').attr('class','links');
+  const linkEls = linkG.selectAll('line')
+    .data(allLinks)
+    .join('line')
+    .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+    .attr('x2', d => d.target.x).attr('y2', d => d.target.y)
+    .attr('stroke', d => d.isHub ? `rgba(255,255,255,0.05)` : `rgba(255,255,255,0.10)`)
+    .attr('stroke-width', d => d.isHub ? 0.8 : 1.2)
+    .attr('stroke-dasharray', d => d.isHub ? '' : '3 3');
+
+  // Hub nodes
+  const hubG = svg.append('g').attr('class','hubs');
+  hubs.forEach(h => {
+    const g = hubG.append('g').attr('class','hub-node').attr('transform',`translate(${h.x},${h.y})`);
+    // Outer glow ring
+    g.append('circle').attr('r', 36).attr('fill', 'none')
+     .attr('stroke', fwColors[h.fw]).attr('stroke-width', 0.5).attr('stroke-opacity', 0.2);
+    g.append('circle').attr('r', 26).attr('fill', `rgba(${h.fw==='A'?'96,165,250':h.fw==='B'?'52,211,153':h.fw==='C'?'251,191,36':h.fw==='D'?'248,113,113':'192,132,252'},0.06}`)
+     .attr('stroke', fwColors[h.fw]).attr('stroke-width', 1).attr('stroke-opacity', 0.4);
+    g.append('circle').attr('r', 14).attr('fill', fwColors[h.fw]).attr('fill-opacity', 0.12)
+     .attr('stroke', fwColors[h.fw]).attr('stroke-width', 1.5).attr('filter', `url(#glow-${h.fw})`);
+    g.append('text').attr('text-anchor','middle').attr('dy','0.35em')
+     .attr('font-family','Cormorant Garamond,serif').attr('font-size','11').attr('font-weight','700')
+     .attr('fill', fwColors[h.fw]).text(h.label);
+    // Label below
+    const words = fwNames[h.fw].split(' ');
+    const line1 = words.slice(0,2).join(' ');
+    const line2 = words.slice(2).join(' ');
+    g.append('text').attr('y', 32).attr('text-anchor','middle')
+     .attr('font-family','JetBrains Mono,monospace').attr('font-size','7.5').attr('fill','#6B7A99')
+     .attr('letter-spacing','0.06em').text(line1.toUpperCase());
+    if (line2) g.append('text').attr('y', 42).attr('text-anchor','middle')
+     .attr('font-family','JetBrains Mono,monospace').attr('font-size','7.5').attr('fill','#6B7A99')
+     .attr('letter-spacing','0.06em').text(line2.toUpperCase());
+  });
+
+  // Song nodes
+  const songG = svg.append('g').attr('class','songs');
+  const tooltip = document.getElementById('const-tooltip');
+  const ttTitle = document.getElementById('tt-title');
+  const ttMeta  = document.getElementById('tt-meta');
+  const ttEdge  = document.getElementById('tt-edge');
+
+  songs.forEach(s => {
+    const g = songG.append('g').attr('class','song-node').attr('transform',`translate(${s.x},${s.y})`);
+    const col = fwColors[s.fw];
+
+    // Star shape using polygon
+    const pts = starPoints(0, 0, 7, 3.5, 5);
+    g.append('polygon').attr('points', pts).attr('fill', col).attr('fill-opacity', 0.15)
+     .attr('stroke', col).attr('stroke-width', 1).attr('filter', `url(#glow-${s.fw})`);
+
+    // Invisible hit area
+    g.append('circle').attr('r', 18).attr('fill', 'transparent').attr('cursor','pointer')
+     .on('mouseenter', function(event) {
+       d3.select(this.parentNode).select('polygon').attr('fill-opacity', 0.5).attr('stroke-width', 2);
+       // Highlight connected links
+       linkEls.attr('stroke-opacity', l =>
+         (l.source.id === s.id || l.target.id === s.id) ? 1 : 0.15
+       ).attr('stroke-width', l =>
+         (l.source.id === s.id || l.target.id === s.id) ? 2 : 0.8
+       );
+       // Tooltip
+       ttTitle.textContent = s.name;
+       ttMeta.textContent = `${s.album} · ${s.year} · Framework ${s.fw}`;
+       ttEdge.textContent = `Connects to: ${s.edge}`;
+       tooltip.classList.add('visible');
+       const rect = svgEl.getBoundingClientRect();
+       const tx = Math.min(event.clientX - rect.left + 12, W - 300);
+       const ty = Math.max(event.clientY - rect.top - 40, 10);
+       tooltip.style.left = tx + 'px';
+       tooltip.style.top  = ty + 'px';
+     })
+     .on('mousemove', function(event) {
+       const rect = svgEl.getBoundingClientRect();
+       const tx = Math.min(event.clientX - rect.left + 12, W - 300);
+       const ty = Math.max(event.clientY - rect.top - 40, 10);
+       tooltip.style.left = tx + 'px';
+       tooltip.style.top  = ty + 'px';
+     })
+     .on('mouseleave', function() {
+       d3.select(this.parentNode).select('polygon').attr('fill-opacity', 0.15).attr('stroke-width', 1);
+       linkEls.attr('stroke-opacity', null).attr('stroke-width', null);
+       tooltip.classList.remove('visible');
+     });
+
+    // Label
+    const ang = Math.atan2(s.y - hubMap[s.fw].y, s.x - hubMap[s.fw].x);
+    const lx = 14 * Math.cos(ang);
+    const ly = 14 * Math.sin(ang);
+    g.append('text').attr('x', lx).attr('y', ly + 4)
+     .attr('text-anchor', lx < 0 ? 'end' : 'start')
+     .attr('font-family','Inter,sans-serif').attr('font-size','7.5').attr('fill','#8891A4')
+     .attr('pointer-events','none')
+     .text(s.name.replace(/"/g,''));
+  });
+
+  function starPoints(cx, cy, outerR, innerR, points) {
+    let pts = [];
+    for (let i = 0; i < points * 2; i++) {
+      const r = i % 2 === 0 ? outerR : innerR;
+      const a = (i * Math.PI) / points - Math.PI / 2;
+      pts.push(`${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`);
+    }
+    return pts.join(' ');
+  }
+})();
+
+// ═══════════════════════════════════════════════════════
+//  D3 GLOBE
+// ═══════════════════════════════════════════════════════
+(function buildGlobe() {
+  const container = document.getElementById('globe-svg');
+  if (!container) return;
+
+  const W = container.parentElement.clientWidth || 600;
+  const H = Math.min(W * 0.85, 560);
+  container.setAttribute('width', W);
+  container.setAttribute('height', H);
+
+  const svg = d3.select('#globe-svg');
+
+  const defs = svg.append('defs');
+  // Sphere gradient
+  const sg = defs.append('radialGradient').attr('id','sphereGrad')
+    .attr('cx','40%').attr('cy','35%').attr('r','60%');
+  sg.append('stop').attr('offset','0%').attr('stop-color','#0d1f3c');
+  sg.append('stop').attr('offset','100%').attr('stop-color','#030712');
+
+  // Outer glow
+  const gf = defs.append('filter').attr('id','globeGlow').attr('x','-20%').attr('y','-20%').attr('width','140%').attr('height','140%');
+  gf.append('feGaussianBlur').attr('stdDeviation','8').attr('result','blur');
+  const gm = gf.append('feMerge');
+  gm.append('feMergeNode').attr('in','blur');
+  gm.append('feMergeNode').attr('in','SourceGraphic');
+
+  const projection = d3.geoOrthographic()
+    .scale(Math.min(W, H) * 0.42)
+    .translate([W/2, H/2])
+    .rotate([66, -18, 0])
+    .clipAngle(90);
+
+  const path = d3.geoPath().projection(projection);
+  const graticule = d3.geoGraticule()();
+
+  // Outer glow ring
+  svg.append('circle')
+    .attr('cx', W/2).attr('cy', H/2)
+    .attr('r', projection.scale() + 6)
+    .attr('fill', 'none')
+    .attr('stroke', 'rgba(96,165,250,0.1)')
+    .attr('stroke-width', 12)
+    .attr('filter', 'url(#globeGlow)');
+
+  // Sphere base
+  const sphere = svg.append('path')
+    .datum({type:'Sphere'})
+    .attr('class','sphere')
+    .attr('d', path)
+    .attr('fill', 'url(#sphereGrad)');
+
+  // Graticule
+  const grat = svg.append('path')
+    .datum(graticule)
+    .attr('class','graticule')
+    .attr('d', path);
+
+  // Countries group (filled after fetch)
+  const countriesG = svg.append('g').attr('class','countries');
+  const pinsG      = svg.append('g').attr('class','pins');
+  const arcsG      = svg.append('g').attr('class','arcs');
+
+  // Pin data
+  const pinData = [
+    // Layer: pr
+    { id:'santurce',   name:'Santurce, San Juan',       layer:'pr',   lon:-66.0763, lat:18.4655, songs:'El Apagón · Lo Que Le Pasó a Hawaii · La Mudanza', lyric:'"Si no quieres ver a Puerto Rico florecer / Vete pa\' la puta, yo me quedo aquí" — El Apagón (2022)', anno:'Historically a working-class and Afro-Puerto Rican neighborhood, Santurce has become the epicenter of Puerto Rico\'s gentrification crisis. Act 60-enabled American investors have converted properties to Airbnbs; murals have been painted over.' },
+    { id:'rincon',     name:'Rincón (West Coast)',       layer:'pr',   lon:-67.2494, lat:18.3403, songs:'El Apagón', lyric:'"No me quiero ir de aquí, que se vayan ellos / Lo que es mío lo cogen prestado" — El Apagón outro (2022)', anno:'Puerto Rico\'s surf capital; ground zero for crypto-investor and tech-worker colonization enabled by Act 60. Beaches constitutionally designated as public have been effectively privatized through luxury development.' },
+    { id:'vegabaja',   name:'Vega Baja (Almirante Sur)', layer:'pr',   lon:-66.3861, lat:18.4428, songs:'El Mundo Es Mío · La Mudanza · Debí Tirar Más Fotos', lyric:'"El mundo es mío y todavía no lo saben" — El Mundo Es Mío (2016)', anno:'Bad Bunny\'s hometown — Almirante Sur barrio of Vega Baja. Working-class municipality on Puerto Rico\'s north coast; origin point of the entire political project in EL ARCHIVO.' },
+    { id:'loiza',      name:'Loíza',                     layer:'pr',   lon:-65.8772, lat:18.4322, songs:'El Apagón (documentary) · Lo Que Le Pasó a Hawaii', lyric:'"Esta es mi playa, este es mi sol / Esta es mi tierra, esto soy yo" — Aquí Vive Gente (2022)', anno:'Puerto Rico\'s most Afro-Caribbean municipality — center of bomba music, Taíno and African syncretic religious practice. Chronically underinvested; coastal location makes it a target for tourism development.' },
+    { id:'ponce',      name:'Ponce / Southwest',         layer:'pr',   lon:-66.6142, lat:17.9988, songs:'Estamos Bien · YHLQMDLG', lyric:null, anno:'The January 7, 2020 earthquake (6.4 magnitude) was centered near Guánica in the southwest, near Ponce. It collapsed the power grid for the third time in three years. Bad Bunny released YHLQMDLG three weeks later.' },
+    { id:'fortaleza',  name:'La Fortaleza, Old San Juan', layer:'pr',  lon:-66.1175, lat:18.4677, songs:'Afilando los Cuchillos · Callaíta', lyric:'"Estamos afilando los cuchillos / Pa\' sacar la hierba mala del bohío" — Afilando (2019)', anno:'The governor\'s official residence — oldest executive mansion in the Western Hemisphere in continuous use. Site of the July 2019 perreo combativo protests and the 500,000-person march. Rosselló\'s resignation announced here.' },
+    // Layer: us
+    { id:'elbarrio',   name:'El Barrio / East Harlem',   layer:'us',   lon:-73.9387, lat:40.7944, songs:'NUEVAYoL · Baile Inolvidable · MIA', lyric:'"NUEVAYoL, la gente te lleva en el corazón" — NUEVAYoL (2025)', anno:'Center of New York Puerto Rican life since the Great Migration of the 1940s–50s. Home to the Nuyorican literary movement (Piri Thomas, Pedro Pietri, Miguel Piñero) and the salsa era "Baile Inolvidable" draws on directly.' },
+    { id:'liberty',    name:'Statue of Liberty',         layer:'us',   lon:-74.0445, lat:40.6892, songs:'NUEVAYoL (music video)', lyric:'"NUEVAYoL, NUEVAYoL / La gente que llegó y nunca más se fue" — NUEVAYoL (2025)', anno:'NUEVAYoL music video (July 4, 2025): Bad Bunny dances inside the Statue of Liberty\'s crown with a Puerto Rican flag draped over it — appropriating the most recognizable symbol of American freedom as a Puerto Rican decolonial claim.' },
+    { id:'orlando',    name:'Orlando, Florida',          layer:'us',   lon:-81.3792, lat:28.5383, songs:'Estamos Bien · NUEVAYoL · Lo Que Le Pasó a Hawaii', lyric:null, anno:'After Hurricane Maria, Florida became the largest destination for Puerto Rican climate refugees — over 100,000 relocated between 2017 and 2019. Central Florida\'s Puerto Rican community became one of the most electorally significant Latino blocs in the U.S.' },
+    { id:'chicago',    name:'Humboldt Park, Chicago',    layer:'us',   lon:-87.6233, lat:41.8827, songs:'NUEVAYoL · Estamos Bien', lyric:null, anno:'Home to one of the oldest Puerto Rican communities outside New York. Paseo Boricua on Division Street is marked by two 60-foot steel Puerto Rican flags — landmarks that speak directly to "La Mudanza": the right to display the Puerto Rican flag as political assertion.' },
+    // Layer: hist
+    { id:'elmorro',    name:'El Morro, Old San Juan',    layer:'hist', lon:-66.1244, lat:18.4705, songs:'La Mudanza · Lo Que Le Pasó a Hawaii', lyric:null, anno:'Castillo San Felipe del Morro — 16th-century Spanish fort guarding San Juan Bay. Represents the long duration of Puerto Rico\'s colonial experience: 400 years under Spain, 125+ years under the United States. The DTMF visualizers explicitly cover this history.' },
+    { id:'lares',      name:'Lares — El Grito (1868)',   layer:'hist', lon:-66.8777, lat:18.2952, songs:'La Mudanza · Afilando los Cuchillos', lyric:'"Murieron por cargar la bandera nuestra / Los mataron por gritar que somos libres" — La Mudanza (2025)', anno:'On September 23, 1868, a revolutionary uprising in Lares briefly established the Republic of Puerto Rico before Spanish suppression. The Grito de Lares remains the most powerful symbol of Puerto Rican independence — celebrated annually. Bad Bunny\'s 2024 endorsement of Juan Dalmau connects contemporary politics directly to this lineage.' },
+  ];
+
+  let currentLayer = 'all';
+  let autoRotate = true;
+  let rotating = true;
+  const sensitivity = 75;
+
+  // Load world topology
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+    .then(r => r.json())
+    .then(world => {
+      const countries = topojson.feature(world, world.objects.countries);
+
+      countriesG.selectAll('path')
+        .data(countries.features)
+        .join('path')
+        .attr('class', d => d.id === 630 ? 'land land-highlight' : 'land')
+        .attr('d', path);
+
+      drawPins();
+      animate();
+    })
+    .catch(() => {
+      // Fallback: just draw sphere and pins without land
+      drawPins();
+      animate();
+    });
+
+  function drawPins() {
+    pinsG.selectAll('*').remove();
+    arcsG.selectAll('*').remove();
+
+    const filtered = currentLayer === 'all' ? pinData : pinData.filter(p => p.layer === currentLayer);
+
+    // Arcs from PR pins to mainland
+    filtered.filter(p => p.layer === 'us').forEach(p => {
+      const arc = { type:'LineString', coordinates: [[-66.09, 18.47], [p.lon, p.lat]] };
+      arcsG.append('path')
+        .datum(arc)
+        .attr('class','arc-path')
+        .attr('d', path);
+    });
+
+    // Pins
+    filtered.forEach(p => {
+      const coords = projection([p.lon, p.lat]);
+      if (!coords) return;
+      const [px, py] = coords;
+      // Only show if on visible hemisphere
+      const dot = d3.geoCircle().center([p.lon, p.lat]).radius(0.01)();
+      if (path.measure(dot) === 0) return; // behind globe
+
+      const col = p.layer === 'pr' ? '#CE1126' : p.layer === 'us' ? '#60A5FA' : '#FBBF24';
+
+      const g = pinsG.append('g').attr('class','globe-pin').attr('transform', `translate(${px},${py})`);
+
+      // Ripple
+      g.append('circle').attr('r', 14).attr('fill', col).attr('fill-opacity', 0.06);
+      g.append('circle').attr('r', 8).attr('fill', col).attr('fill-opacity', 0.12);
+      g.append('circle').attr('r', 4).attr('fill', col).attr('fill-opacity', 0.9).attr('stroke', 'rgba(0,0,0,0.3)').attr('stroke-width', 0.5)
+        .style('cursor', 'pointer')
+        .on('click', function(event) {
+          event.stopPropagation();
+          showPin(p);
+        })
+        .on('mouseenter', function() { d3.select(this).attr('r', 6); })
+        .on('mouseleave', function() { d3.select(this).attr('r', 4); });
+    });
+  }
+
+  function showPin(p) {
+    document.getElementById('pin-empty').style.display = 'none';
+    const pd = document.getElementById('pin-detail');
+    pd.classList.add('visible');
+    document.getElementById('pd-layer').textContent = p.layer === 'pr' ? '📍 Puerto Rico — Island Communities' : p.layer === 'us' ? '📍 U.S. Mainland — Diaspora Cities' : '📍 Historical & Colonial Landmarks';
+    document.getElementById('pd-name').textContent = p.name;
+    document.getElementById('pd-coords').textContent = `${Math.abs(p.lat).toFixed(4)}° ${p.lat>0?'N':'S'}, ${Math.abs(p.lon).toFixed(4)}° ${p.lon<0?'W':'E'}`;
+    document.getElementById('pd-songs').textContent = p.songs;
+    const lyricEl = document.getElementById('pd-lyric');
+    if (p.lyric) { lyricEl.textContent = p.lyric; lyricEl.style.display='block'; }
+    else lyricEl.style.display='none';
+    document.getElementById('pd-anno').textContent = p.anno;
+  }
+
+  // Drag to rotate
+  const drag = d3.drag()
+    .on('start', () => { autoRotate = false; })
+    .on('drag', event => {
+      const rotate = projection.rotate();
+      projection.rotate([rotate[0] + event.dx / sensitivity * 50, rotate[1] - event.dy / sensitivity * 50]);
+      redraw();
+    })
+    .on('end', () => { autoRotate = true; });
+
+  svg.call(drag);
+
+  function redraw() {
+    svg.select('.sphere').attr('d', path);
+    svg.select('.graticule').attr('d', path);
+    countriesG.selectAll('path').attr('d', path);
+    arcsG.selectAll('path').attr('d', path);
+    drawPins();
+  }
+
+  function animate() {
+    function step() {
+      if (autoRotate) {
+        const r = projection.rotate();
+        projection.rotate([r[0] + 0.12, r[1]]);
+        redraw();
+      }
+      requestAnimationFrame(step);
+    }
+    step();
+  }
+
+  // Layer switching
+  window.setLayer = function(btn, layer) {
+    document.querySelectorAll('.layer-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentLayer = layer;
+    drawPins();
+  };
+})();
+
+// ═══ HERO PARTICLES ═══
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, stars = [], mouse = {x:0,y:0};
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', () => { resize(); initStars(); });
+
+  function initStars() {
+    stars = [];
+    const count = Math.floor((W * H) / 5000);
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.2 + 0.2,
+        alpha: Math.random() * 0.6 + 0.1,
+        speed: Math.random() * 0.3 + 0.05,
+        twinkle: Math.random() * Math.PI * 2,
+        twinkleSpeed: Math.random() * 0.02 + 0.005
+      });
+    }
+  }
+  initStars();
+
+  canvas.addEventListener('mousemove', e => {
+    const r = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+  });
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Deep space gradient
+    const grad = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H)/2);
+    grad.addColorStop(0, '#080D20');
+    grad.addColorStop(0.5, '#05091A');
+    grad.addColorStop(1, '#030610');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Mouse aurora
+    const aGrad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 200);
+    aGrad.addColorStop(0, 'rgba(206,17,38,0.04)');
+    aGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = aGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Stars
+    stars.forEach(s => {
+      s.twinkle += s.twinkleSpeed;
+      const a = s.alpha * (0.6 + 0.4 * Math.sin(s.twinkle));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(220,230,255,${a})`;
+      ctx.fill();
+    });
+
+    // Constellation lines (subtle)
+    if (stars.length > 10) {
+      ctx.strokeStyle = 'rgba(96,165,250,0.04)';
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i < Math.min(stars.length, 80); i++) {
+        for (let j = i+1; j < Math.min(stars.length, 80); j++) {
+          const dx = stars[i].x - stars[j].x;
+          const dy = stars[i].y - stars[j].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 120) {
+            ctx.globalAlpha = (1 - dist/120) * 0.3;
+            ctx.beginPath();
+            ctx.moveTo(stars[i].x, stars[i].y);
+            ctx.lineTo(stars[j].x, stars[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    frame++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ═══ SONG TOGGLE ═══
+function toggleSong(header) {
+  const card = header.closest('.song-card');
+  const body = card.querySelector('.song-body');
+  const isOpen = card.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.song-card.open').forEach(c => {
+    c.classList.remove('open');
+    c.querySelector('.song-body').classList.remove('open');
+  });
+
+  if (!isOpen) {
+    card.classList.add('open');
+    body.classList.add('open');
+  }
+}
+
+// ═══ INTERSECTION OBSERVER ═══
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal, .section-label, .section-rule, .tl-entry, .song-card, .stagger').forEach(el => {
+  observer.observe(el);
+});
+
+// Song cards stagger
+document.querySelectorAll('.song-card').forEach((card, i) => {
+  card.style.transitionDelay = `${i * 0.04}s`;
+});
+
+// Timeline entries stagger
+document.querySelectorAll('.tl-entry').forEach((el, i) => {
+  el.style.transitionDelay = `${(i % 6) * 0.1}s`;
+  observer.observe(el);
+});
+
+// Edge cards stagger on scroll
+document.querySelectorAll('.edge-card').forEach((el, i) => {
+  el.style.transitionDelay = `${i * 0.08}s`;
+  el.classList.add('reveal');
+  observer.observe(el);
+});
+
+// Bib entries fade
+document.querySelectorAll('.bib-entry').forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(8px)';
+  el.style.transition = `opacity 0.4s ${i*0.03}s, transform 0.4s ${i*0.03}s`;
+  el.classList.add('reveal');
+  observer.observe(el);
+});
+
+
+</script>
+</body>
+</html>
