@@ -2584,13 +2584,10 @@ document.querySelectorAll('.edge-card').forEach((el, i) => {
   observer.observe(el);
 });
 
-// Bib entries fade
+// Bib entries always visible (no animation needed)
 document.querySelectorAll('.bib-entry').forEach((el, i) => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(8px)';
-  el.style.transition = `opacity 0.4s ${i*0.03}s, transform 0.4s ${i*0.03}s`;
-  el.classList.add('reveal');
-  observer.observe(el);
+  el.style.opacity = '1';
+  el.style.transform = 'translateY(0)';
 });
 
 
